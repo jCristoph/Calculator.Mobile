@@ -15,12 +15,12 @@ namespace Calculator.Mobile.Services
         public static double Compute(string expression)
         {
             numbers = (expression.Split(mathSigns)).ToList();
-            SetExpressionOrder(expression);
-            while (operationOrder.Count > 0)
+            SetExpressionOrder(expression);  
+            while(operationOrder.Count > 0)
             {
                 var index = 0;
                 var result = 0.0;
-                if (operationOrder.Contains("√"))
+                if (operationOrder[0].Equals("√"))
                 {
                     index = operationOrder.IndexOf("√");
                     if(numbers[index] == "")
@@ -28,27 +28,27 @@ namespace Calculator.Mobile.Services
                     else
                         result = Convert.ToDouble(numbers[index]) * Math.Sqrt(Convert.ToDouble(numbers[index + 1]));
                 }
-                else if (operationOrder.Contains("^"))
+                else if (operationOrder[0].Equals("^"))
                 {
                     index = operationOrder.IndexOf("^");
                     result = Math.Pow(Convert.ToDouble(numbers[index]), Convert.ToDouble(numbers[index + 1]));
                 }
-                else if (operationOrder.Contains("*"))
+                else if (operationOrder[0].Equals("*"))
                 {
                     index = operationOrder.IndexOf("*");
                     result = Convert.ToDouble(numbers[index]) * Convert.ToDouble(numbers[index + 1]);
                 }
-                else if (operationOrder.Contains("/"))
+                else if (operationOrder[0].Equals("/"))
                 {
                     index = operationOrder.IndexOf("/");
                     result = Convert.ToDouble(numbers[index]) / Convert.ToDouble(numbers[index + 1]);
                 }
-                else if (operationOrder.Contains("+"))
+                else if (operationOrder[0].Equals("+"))
                 {
                     index = operationOrder.IndexOf("+");
                     result = Convert.ToDouble(numbers[index]) + Convert.ToDouble(numbers[index + 1]);
                 }
-                else if (operationOrder.Contains("-"))
+                else if (operationOrder[0].Equals("-"))
                 {
                     index = operationOrder.IndexOf("-");
                     result = Convert.ToDouble(numbers[index]) - Convert.ToDouble(numbers[index + 1]);
@@ -69,13 +69,13 @@ namespace Calculator.Mobile.Services
                     operationOrder.Add("+");
                 if (array[i] == '-')
                     operationOrder.Add("-");
-                if (array[i] == '*')
+                if(array[i] == '*')
                     operationOrder.Add("*");
                 if (array[i] == '/')
                     operationOrder.Add("/");
-                if (array[i] == '^')
+                if(array[i] == '^')
                     operationOrder.Add("^");
-                if (array[i] == '√')
+                if(array[i] == '√')
                     operationOrder.Add("√");
             }
         }
