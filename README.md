@@ -12,3 +12,4 @@ Features added to tutorial version:
 - add vibrations when button clicks
 - add goodlooking vertical and horizontal layout
 - add last calculation label
+- add a popup message to inform user to not dividing by 0
