@@ -20,15 +20,24 @@
                 <Setter Property="IsReadOnly" Value="True"/>
             </Style>
 
-            <Style x:Key="BaseButton" TargetType="Button">
+            <Style TargetType="Label">
                 <Setter Property="FontSize" Value="46"/>
                 <Setter Property="Margin" Value="5"/>
+                <Setter Property="HorizontalTextAlignment" Value="End"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+            </Style>
+
+            <Style x:Key="BaseButton" TargetType="Button">
+                <Setter Property="FontSize" Value="25"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="CornerRadius" Value="100"/>
             </Style>
 
             <Style TargetType="Button" BasedOn="{StaticResource BaseButton}"/>
 
             <Style x:Key="BtnNumber" TargetType="Button" BasedOn="{StaticResource BaseButton}">
-                <Setter Property="Background" Value="#29AF29"/>
+                <Setter Property="Background" Value="green"/>
+                
             </Style>
 
             <Style x:Key="BtnClear" TargetType="Button" BasedOn="{StaticResource BaseButton}">
@@ -46,58 +55,90 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid Margin="10">
+    <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <Entry Grid.ColumnSpan="5" Text="{Binding ScreenVal}"/>
-
-        <Button Grid.Column="0" Grid.Row="1" Text="7" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="7"/>
-
-        <Button Grid.Column="1" Grid.Row="1" Text="8" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="8"/>
-
-        <Button Grid.Column="2" Grid.Row="1" Text="9" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="9"/>
-
-        <Button Grid.Column="0" Grid.Row="2" Text="4" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="4"/>
-
-        <Button Grid.Column="1" Grid.Row="2" Text="5" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="5"/>
-
-        <Button Grid.Column="2" Grid.Row="2" Text="6" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="6"/>
-
-        <Button Grid.Column="0" Grid.Row="3" Text="1" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="1"/>
-
-        <Button Grid.Column="1" Grid.Row="3" Text="2" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="2"/>
-
-        <Button Grid.Column="2" Grid.Row="3" Text="3" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="3"/>
-
-        <Button Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="0" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="0"/>
-
-        <Button Grid.Column="2" Grid.Row="4" Text="," Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter=","/>
-
-        <Button Grid.Column="3" Grid.Row="1" Text="/" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="/"/>
-
-        <Button Grid.Column="3" Grid.Row="2" Text="-" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="-"/>
-
-        <Button Grid.Column="3" Grid.Row="3" Text="*" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="*"/>
-
-        <Button Grid.Column="3" Grid.Row="4" Text="C" Style="{StaticResource BtnClear}" Command="{Binding ClearScreenCommand}"/>
-
-        <Button Grid.Column="4" Grid.Row="1"  Grid.RowSpan="2"  Text="+" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="+"/>
-
-        <Button Grid.Column="4" Grid.Row="3"  Grid.RowSpan="2" Text="=" Style="{StaticResource BtnResult}" Command="{Binding GetResultCommand}"/>
         
+        <Grid x:Name="resultsGrid" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Text="{Binding LastCalc}"/>
+
+            <Entry Text="{Binding ScreenVal}" Grid.Row="1"/>
+        </Grid>
+
+
+        <Grid x:Name="controlGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="C" Style="{StaticResource BtnClear}" Command="{Binding ClearScreenCommand}"/>
+
+            <Button Grid.Column="2" Grid.Row="0" Text="&lt;" Style="{StaticResource BtnClear}" Command="{Binding BackspaceCommand}"/>
+
+            <Button Grid.Column="3" Grid.Row="0" Text="x^2" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="^2"/>
+
+            <Button Grid.Column="4" Grid.Row="0" Text="x^y" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="^"/>
+
+            
+            
+            <Button Grid.Column="0" Grid.Row="1" Text="7" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="7"/>
+
+            <Button Grid.Column="1" Grid.Row="1" Text="8" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="8"/>
+
+            <Button Grid.Column="2" Grid.Row="1" Text="9" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="9"/>
+
+            <Button Grid.Column="0" Grid.Row="2" Text="4" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="4"/>
+
+            <Button Grid.Column="1" Grid.Row="2" Text="5" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="5"/>
+
+            <Button Grid.Column="2" Grid.Row="2" Text="6" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="6"/>
+
+            <Button Grid.Column="0" Grid.Row="3" Text="1" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="1"/>
+
+            <Button Grid.Column="1" Grid.Row="3" Text="2" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="2"/>
+
+            <Button Grid.Column="2" Grid.Row="3" Text="3" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="3"/>
+
+            
+            
+            <Button Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="0" Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter="0"/>
+
+            <Button Grid.Column="2" Grid.Row="4" Text="," Style="{StaticResource BtnNumber}" Command="{Binding AddNumberCommand}" CommandParameter=","/>
+
+            <Button Grid.Column="3" Grid.Row="4"  Grid.ColumnSpan="2" Text="=" Style="{StaticResource BtnResult}" Command="{Binding GetResultCommand}"/>
+            
+            
+            
+            <Button Grid.Column="3" Grid.Row="1" Text="/" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="/"/>
+
+            <Button Grid.Column="4" Grid.Row="1" Text="√" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="√"/>
+
+            <Button Grid.Column="3" Grid.Row="3" Text="-" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="-"/>
+
+            <Button Grid.Column="3" Grid.Row="2" Text="*" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="*"/>
+
+            <Button Grid.Column="4" Grid.Row="2"  Grid.RowSpan="2"  Text="+" Style="{StaticResource BtnOperation}" Command="{Binding AddOperationCommand}" CommandParameter="+"/>
+
+            
+        </Grid>
     </Grid>
 
 </ContentPage>

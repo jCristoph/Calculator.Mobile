@@ -10,21 +10,25 @@ namespace Calculator.Mobile.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private string screenVal;
-        private List<string> availableOperations = new List<string> { "+","-","/","*" };
+        private string lastCalc;
+        private List<string> availableOperations = new List<string> { "+","-","/","*","^", "√" };
         private bool isLastSignAnOperation;
         private DataTable dataTable = new DataTable();
+        private readonly Services.IMessageService messageService;
         public MainViewModel()
         {
             Title = "Calculator";
             ScreenVal = "0";
             AddNumberCommand = new Command(AddNumber);
-            AddOperationCommand = new Command(AddOperation, CanAddOperation);
+            AddOperationCommand = new Command(AddOperation);
             ClearScreenCommand = new Command(ClearScreen);
             GetResultCommand = new Command(GetResult, CanGetResult);
+            BackspaceCommand = new Command(BtnBack);
+            messageService = DependencyService.Get<Services.IMessageService>();
         }
 
 
-
+        public Command BackspaceCommand { get; }
         public Command AddNumberCommand { get; }
         public Command AddOperationCommand { get; }
         public Command ClearScreenCommand { get; }
@@ -38,13 +42,30 @@ namespace Calculator.Mobile.ViewModels
                 SetProperty(ref isLastSignAnOperation, value);
                 GetResultCommand.ChangeCanExecute();
                 AddOperationCommand.ChangeCanExecute();
-
             }
+        }
+
+        public string LastCalc
+        {
+            get { return lastCalc; }
+            set { SetProperty(ref lastCalc, value); }
         }
         public string ScreenVal
         {
             get { return screenVal; }
             set { SetProperty(ref screenVal, value); }
+        }
+
+        private void BtnBack()
+        {
+            if (ScreenVal.Length < 2)
+            {
+                ScreenVal = "0";
+            }
+            else if (ScreenVal != "0")
+            {
+                ScreenVal = ScreenVal.Remove(ScreenVal.Length - 1);
+            }
         }
 
         private void AddNumber(object obj)
@@ -65,10 +86,16 @@ namespace Calculator.Mobile.ViewModels
         private void AddOperation(object obj)
         {
             var operation = obj as string;
+            
+            if(IsLastSignAnOperation)
+                ScreenVal = ScreenVal.Remove(ScreenVal.Length - 1) + operation;
+            else
+                ScreenVal += operation;
 
-            ScreenVal += operation;
-
-            IsLastSignAnOperation=true;
+            if(!ScreenVal.Contains("^2"))
+                IsLastSignAnOperation=true;
+            if (ScreenVal.EndsWith("0√"))
+                ScreenVal = "√";
         }
 
         private void ClearScreen(object obj)
@@ -78,11 +105,19 @@ namespace Calculator.Mobile.ViewModels
 
         private void GetResult(object obj)
         {
-            var result = Math.Round(Convert.ToDouble(dataTable.Compute(ScreenVal.Replace(",", "."), "")), 2);
-            ScreenVal = result.ToString();
+            if(ScreenVal.EndsWith("/0"))
+            {
+                messageService.ShowAsync("You cannot divide by 0!!!");
+                ScreenVal = "0";
+            }
+            else
+            {
+                var result = Math.Round(Services.ExpressionResolver.Compute(ScreenVal),9);
+                LastCalc = ScreenVal + "=" + result.ToString();
+                ScreenVal = result.ToString();
+            }
         }
 
         private bool CanGetResult(object arg) => !IsLastSignAnOperation;
-        private bool CanAddOperation(object arg) => !IsLastSignAnOperation;
     }
 }

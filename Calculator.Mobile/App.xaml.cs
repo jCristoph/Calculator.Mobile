@@ -13,7 +13,7 @@ namespace Calculator.Mobile
         public App()
         {
             InitializeComponent();
-
+            DependencyService.Register<Services.IMessageService, Services.MessageService>();
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
