@@ -58,6 +58,7 @@ namespace Calculator.Mobile.ViewModels
 
         private void BtnBack()
         {
+            Vibration.Vibrate(10);
             if (ScreenVal.Length < 2)
             {
                 ScreenVal = "0";
@@ -70,6 +71,7 @@ namespace Calculator.Mobile.ViewModels
 
         private void AddNumber(object obj)
         {
+            Vibration.Vibrate(10);
             var number = obj as string;
 
             if (ScreenVal == "0" && number != ",")
@@ -85,6 +87,7 @@ namespace Calculator.Mobile.ViewModels
 
         private void AddOperation(object obj)
         {
+            Vibration.Vibrate(10);
             var operation = obj as string;
             
             if(IsLastSignAnOperation)
@@ -100,12 +103,14 @@ namespace Calculator.Mobile.ViewModels
 
         private void ClearScreen(object obj)
         {
+            Vibration.Vibrate(20);
             ScreenVal = "0";
         }
 
         private void GetResult(object obj)
         {
-            if(ScreenVal.EndsWith("/0"))
+            Vibration.Vibrate(10);
+            if (ScreenVal.EndsWith("/0"))
             {
                 messageService.ShowAsync("You cannot divide by 0!!!");
                 ScreenVal = "0";
